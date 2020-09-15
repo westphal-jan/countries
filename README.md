@@ -20,5 +20,14 @@ npm run build
 npm run lint
 ```
 
+### Deploy to Github Pages
+Make sure `scripts/deploy.sh` is executable, e.g.:
+```
+chmod 755 scripts/deploy.sh
+```
+```
+npm run deploy
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
