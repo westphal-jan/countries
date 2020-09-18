@@ -1,4 +1,4 @@
-# flags
+# countries
 
 ## Project setup
 ```
