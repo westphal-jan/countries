@@ -1,6 +1,20 @@
 <template>
   <div>
     <h1>Quiz</h1>
+    <div class="quiz">
+      <img :src="imageUrl(currentCountry)" />
+      <figcaption v-show="isError">
+        {{ countries[currentCountry].country_name }}
+      </figcaption>
+    </div>
+    <div class="quiz-input">
+      <input
+        :class="{ error: isError }"
+        v-model="answerCountry"
+        v-on:keyup.enter="onAnswer"
+        placeholder="Your answer"
+      />
+    </div>
   </div>
 </template>
 
@@ -16,9 +30,17 @@ declare interface Country {
 @Component
 export default class FlagQuiz extends Vue {
   countries: { [id: string]: Country } = {};
+  currentCountry = "";
+  answerCountry = "";
+  isError = false;
   data() {
     return {
-      countries: {}
+      countries: {
+        DE: {}
+      },
+      currentCountry: "DE",
+      answerCountry: "",
+      isError: false
     };
   }
   mounted() {
@@ -34,9 +56,56 @@ export default class FlagQuiz extends Vue {
   }
   nextCountry() {
     const country = _.sample(Object.keys(this.countries));
-    console.log(country);
+    if (country) {
+      this.currentCountry = country;
+    }
+  }
+  onAnswer() {
+    const expectedAnswer = this.countries[this.currentCountry].country_name;
+    if (this.answerCountry.toLowerCase() == expectedAnswer.toLowerCase()) {
+      this.answerCountry = "";
+      this.nextCountry();
+    } else {
+      this.isError = true;
+      setTimeout(() => (this.isError = false), 300);
+    }
   }
 }
 </script>
 
-<style></style>
+<style>
+.quiz {
+  width: 300px;
+  height: 300px;
+  background-color: #e8e8e8;
+  padding: 10px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  border-radius: 10px;
+}
+
+.quiz img {
+  width: 100%;
+}
+
+.quiz-input {
+  margin: 10px;
+}
+
+.error {
+  position: relative;
+  animation: shake 0.1s linear;
+  animation-iteration-count: 3;
+}
+
+@keyframes shake {
+  0% {
+    left: -5px;
+  }
+  100% {
+    right: -5px;
+  }
+}
+</style>
