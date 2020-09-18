@@ -1,11 +1,15 @@
 <template>
   <div>
-    <h1>Country Overview ({{Object.keys(countries).length}})</h1>
+    <h1>Country Overview ({{ Object.keys(countries).length }})</h1>
     <div class="flags">
-      <div class="flag" v-for="(countryName, countryCode) in countries" :key="countryCode">
+      <div
+        class="flag"
+        v-for="(countryData, countryCode) in countries"
+        :key="countryCode"
+      >
         <img :src="imageUrl(countryCode)" />
         <figcaption>
-          {{countryName}}
+          {{ countryData.country_name }}
         </figcaption>
         <!-- {{countryCode}}: {{countryName}} -->
       </div>
@@ -15,17 +19,31 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import countries from "@/assets/countries.json"
+import axios from "axios";
+
+declare interface Country {
+  country_name: string;
+}
 
 @Component
 export default class Overview extends Vue {
+  countries: { [id: string]: Country } = {};
   data() {
     return {
-      countries
+      countries: {
+        DE: "Germany"
+      }
     };
   }
+  mounted() {
+    axios
+      .get(
+        "https://cdn.statically.io/gh/westphal-jan/country-data/master/data/un_countries.json"
+      )
+      .then(response => (this.countries = response.data));
+  }
   imageUrl(countryCode: string): string {
-    return `https://cdn.statically.io/gh/westphal-jan/flags/master/src/assets/svg/${countryCode.toLowerCase()}.svg`
+    return `https://cdn.statically.io/gh/westphal-jan/country-data/master/data/flags/${countryCode.toLowerCase()}.svg`;
   }
 }
 </script>
@@ -55,6 +73,5 @@ export default class Overview extends Vue {
 
 .flag figcaption {
   text-align: center;
-
 }
 </style>
