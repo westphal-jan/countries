@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
+import FlagQuiz from "../views/FlagQuiz.vue";
 
 Vue.use(VueRouter);
 
@@ -9,6 +10,11 @@ const routes: Array<RouteConfig> = [
     path: "/countries",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/countries/flag-quiz",
+    name: "Quiz",
+    component: FlagQuiz
   },
   {
     path: "/countries/about",

@@ -30,9 +30,7 @@ export default class Overview extends Vue {
   countries: { [id: string]: Country } = {};
   data() {
     return {
-      countries: {
-        DE: "Germany"
-      }
+      countries: {}
     };
   }
   mounted() {
